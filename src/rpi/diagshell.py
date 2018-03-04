@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-
+import time
 def getInput(prompt):
 	cmd = input(prompt + '> ')
 	return cmd
@@ -15,14 +15,14 @@ def motorContext():
 			print('stop - Stop motor')
 			print('exit')
 		elif command == 'fwd':
-			GPIO.output(5, 1)
-			GPIO.output(7, 0)
+			GPIO.output(8, GPIO.HIGH)
+			GPIO.output(7, GPIO.LOW)
 		elif command == 'rev':
-			GPIO.output(5, 0)
-			GPIO.output(7, 1)
+			GPIO.output(8, GPIO.LOW)
+			GPIO.output(7, GPIO.HIGH)
 		elif command == 'stop':
-			GPIO.output(5, 0)
-			GPIO.output(7, 0)
+			GPIO.output(8, GPIO.LOW)
+			GPIO.output(7, GPIO.LOW)
 		elif command == 'exit':
 			state = False
 
@@ -59,12 +59,14 @@ def driveContext():
 state = True
 print()
 print('Diagnostic Shell')
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 # Motor A
-GPIO.setup(5, GPIO.OUT)
+GPIO.setup(8, GPIO.OUT)
 # Motor B
 GPIO.setup(7, GPIO.OUT)
+GPIO.output(8, GPIO.LOW)
+GPIO.output(7, GPIO.LOW)
 
 
 while state:
