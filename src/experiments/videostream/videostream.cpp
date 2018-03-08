@@ -35,8 +35,6 @@ int main(int, char**)
     int frame_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
 
     //--- GRAB AND WRITE LOOP
-    cout << "Start grabbing" << endl
-        << "Press any key to terminate" << endl;
     for (;;)
     {
         // wait for a new frame from camera and store it into 'frame'
@@ -62,11 +60,11 @@ int main(int, char**)
         cv::erode(frame1, frame1, Mat());
 
         std::vector<Rect> grid;
-#ifdef _GUI
         grid.push_back(Rect(Point(0, frame.rows - 200), Point(frame.cols, frame.rows - 150)));   //Rectangle bottom
         grid.push_back(Rect(Point(160, frame.rows - 300), Point(480, frame.rows - 250)));   //Rectangle top
         grid.push_back(Rect(Point(0, frame.rows - 300), Point(160, frame.rows - 250)));   //Rectangle left top
         grid.push_back(Rect(Point(480, frame.rows - 300), Point(640, frame.rows - 250)));   //Rectangle right top
+#ifdef _GUI
         imshow("Processed", frame1);
 #endif
         Moments m = moments(frame1(grid[0]), false);   //layer bottom
@@ -86,7 +84,11 @@ int main(int, char**)
         float yRight = mLeft.m01 / mLeft.m00;
 
         float w2 = frame.cols / 2.0f;
+        // k gives us an "off-centre" value for our path
+        // When k = 0, we need to set the steering servo to 90 degrees.
+        // which corresponds to straight ahead.
         float k = (w2 - x) / w2 * 2;
+/*
         int speed = 35;
         int vr = speed;
         int vl = speed;
@@ -95,7 +97,7 @@ int main(int, char**)
             vl = (1 - fabs(k)) * speed;
         else
             vr = (1 - fabs(k)) * speed;
-
+*/
 #ifdef _GUI
         rectangle(frame, grid[0], Scalar( 255, 0, 0), 2, 8); //bottom
         rectangle(frame, grid[1], Scalar( 255, 0, 0), 2, 8); //top
@@ -107,6 +109,7 @@ int main(int, char**)
         circle(frame, Point(x + 100, frame.rows - 150 - y), 10, Scalar( 255, 0, 0), 3, 8); //bottom
         circle(frame, Point(x2 + 160, frame.rows - 250 - y2), 10, Scalar( 0, 255, 0), 3, 8); //top
 #endif
+        printf("w2=%f x=%f k=%f\n", w2, x, k);
     }
     // the camera will be deinitialized automatically in VideoCapture destructor
     return 0;
