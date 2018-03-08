@@ -69,19 +69,19 @@ int main(int, char**)
         grid.push_back(Rect(Point(480, frame.rows - 300), Point(640, frame.rows - 250)));   //Rectangle right top
         imshow("Processed", frame1);
 #endif
-        Moments m = moments(erodee(grid[0]), false);   //layer bottom
+        Moments m = moments(frame1(grid[0]), false);   //layer bottom
         float x = m.m10 / m.m00;
         float y = m.m01 / m.m00;
 
-        Moments m2 = moments(erodee(grid[1]), false);    //layer top
+        Moments m2 = moments(frame1(grid[1]), false);    //layer top
         float x2 = m2.m10 / m2.m00;
         float y2 = m2.m01 / m2.m00;
 
-        Moments mLeft = moments(erodee(grid[2]), false);   //left
+        Moments mLeft = moments(frame1(grid[2]), false);   //left
         float xLeft = mLeft.m10 / mLeft.m00;
         float yLeft = mLeft.m01 / mLeft.m00;
 
-        Moments mRight = moments(erodee(grid[3]), false);   //right
+        Moments mRight = moments(frame1(grid[3]), false);   //right
         float xRight = mLeft.m10 / mLeft.m00;
         float yRight = mLeft.m01 / mLeft.m00;
 
