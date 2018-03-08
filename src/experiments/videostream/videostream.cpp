@@ -14,7 +14,7 @@ using namespace std;
 
 int main(int, char**)
 {
-    Mat frame;
+    Mat frame, frame1;
     //--- INITIALIZE VIDEOCAPTURE
     VideoCapture cap;
     // open the default camera using default API
