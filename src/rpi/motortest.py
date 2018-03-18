@@ -6,22 +6,21 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 #Right motor input A
-GPIO.setup(8,GPIO.OUT)
+GPIO.setup(18,GPIO.OUT)
 #Right motor input B
-GPIO.setup(7,GPIO.OUT)
+GPIO.setup(23,GPIO.OUT)
 
+print('In main loop')
 while True:
-    print('Rotating motor forward direction')
-    GPIO.output(8,GPIO.HIGH)
-    GPIO.output(7,GPIO.LOW)
-    time.sleep(2)
-    GPIO.output(8,GPIO.LOW)
+    print('Rotating both motors in clockwise direction')
+    GPIO.output(18,GPIO.HIGH)
+    GPIO.output(23,GPIO.LOW)
     time.sleep(1)
+    GPIO.output(18,GPIO.LOW)
 
-    print('Rotating motor reverse direction')
-    GPIO.output(8,GPIO.LOW)
-    GPIO.output(7,GPIO.HIGH)
-    time.sleep(2)     
-    GPIO.output(7,GPIO.LOW)
-    time.sleep(1)
+    print('Rotating both motors in anticlockwise direction')
+    GPIO.output(18,GPIO.LOW)
+    GPIO.output(23,GPIO.HIGH)
+    time.sleep(1)     
+    GPIO.output(23,GPIO.LOW)
 
