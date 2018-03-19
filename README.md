@@ -4,6 +4,12 @@
 
 Everyone else seems to be working on self-driving vehicles at the moment, so I wanted to get in on the fun.
 
+## Is the construction, etc documented anywhere?
+
+Yes.  You can follow the progress, and even offer comments and suggestions at
+
+https://nowwhywouldyoudothat.blogspot.com.au/2018/02/diy-self-driving.html
+
 ## What is your car?
 
 I am using a kid's ride-on electric car as a platform because I already have it.  This means I have to rework the steering mechanism (which is woefully simple) but that is just one more obstacle to solve.
