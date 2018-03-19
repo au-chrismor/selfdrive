@@ -32,6 +32,7 @@ Make sure you have the pre-requisites are in place
 * libopenblas-dev
 * libatlas-dev
 * liblapack-dev
+* libv4l-dev
 
 ### Settings for OpenCV ###
 

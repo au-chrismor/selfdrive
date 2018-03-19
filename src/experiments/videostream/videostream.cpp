@@ -1,10 +1,3 @@
-/**
-  @file videocapture_basic.cpp
-  @brief A very basic sample for using VideoCapture and VideoWriter
-  @author PkLab.net
-  @date Aug 24, 2016
-*/
-
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <stdio.h>
@@ -139,3 +132,4 @@ int main(int, char**)
     // the camera will be deinitialized automatically in VideoCapture destructor
     return 0;
 }
+

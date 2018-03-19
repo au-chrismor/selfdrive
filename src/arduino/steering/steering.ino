@@ -6,9 +6,7 @@
 #include <Servo.h>
 #include <EEPROM.h>
 
-#define MAX_ADDR  0
-#define MIN_ADDR  1
-#define LED_PIN   13
+#include "steering-hw.h"
 
 void setSteering(int val);
 void ledFlash(void);
@@ -30,6 +28,21 @@ void ledFlash(void) {
   digitalWrite(LED_PIN, ledState);
 }
 
+void moveForward(void) {
+  digitalWrite(MOTOR_A, HIGH);
+  digitalWrite(MOTOR_B, LOW);
+}
+
+void moveReverse(void) {
+  digitalWrite(MOTOR_A, LOW);
+  digitalWrite(MOTOR_B, HIGH);
+}
+
+void moveStop(void) {
+  digitalWrite(MOTOR_A, LOW);
+  digitalWrite(MOTOR_B, LOW);
+}
+
 void setup() {
   int val = 0;
 
@@ -39,7 +52,7 @@ void setup() {
   // Init the serial line
   Serial.begin(115200);
   
-  servo.attach(9, 900, 2000);   // Instantiate a servo object.  For the big servo we need to
+  servo.attach(SERVO_PIN, 900, 2000);   // Instantiate a servo object.  For the big servo we need to
                                   // Set pulse width values.  These were determined experimentally
   pos = 90;
   setSteering(90);
@@ -57,6 +70,13 @@ void setup() {
       min = 30;
   else
       min = val;
+
+  // Set up the motor control
+  pinMode(MOTOR_A, OUTPUT);
+  pinMode(MOTOR_B, OUTPUT);
+
+  // Stop everything
+  moveStop();
 }
 
 // loop waits for a command and acts appropriately
@@ -86,6 +106,18 @@ void loop() {
           pos-=5;
           ledFlash();
         }
+        break;
+      case 'f':
+      case 'F':
+        moveForward();
+        break;
+      case 'r':
+      case 'R':
+        moveReverse();
+        break;
+      case 's':
+      case 'S':
+        moveStop();
         break;
       default:
         break;
