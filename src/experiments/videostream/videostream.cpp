@@ -14,7 +14,7 @@ int main(int, char**)
 	int com = 0;
 
 #ifdef _HAS_SERIAL
-	com = serialOpen("/dev/AMA0", 115200);
+	com = serialOpen("/dev/ttyAMA0", 115200);
 	if(com == -1)
 	{
 		printf("Error %d opening serial line\n", errno);
