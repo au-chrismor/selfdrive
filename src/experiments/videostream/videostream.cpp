@@ -14,7 +14,7 @@ int main(int, char**)
 	int com = 0;
 
 #ifdef _HAS_SERIAL
-	com = serialOpen("/dev/serial1", 115200);               // This name is WRONG for an RPi...
+	com = serialOpen("/dev/AMA0", 115200);
 	if(com == -1)
 	{
 		printf("Error %d opening serial line\n", errno);
@@ -129,7 +129,7 @@ int main(int, char**)
 	}
         else
         {
-                serialPutChar(com, 'f');        // Move
+                serialPutchar(com, 'f');        // Move
         }
 #endif
     }
