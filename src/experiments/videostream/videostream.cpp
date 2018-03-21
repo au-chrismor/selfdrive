@@ -127,10 +127,7 @@ int main(int, char**)
 	{
 		serialPutchar(com, ',');
 	}
-        else
-        {
-                serialPutchar(com, 'f');        // Move
-        }
+        serialPutchar(com, 'f');        // Move
 #endif
     }
     // the camera will be deinitialized automatically in VideoCapture destructor
