@@ -71,8 +71,10 @@ void moveStop(void) {
   digitalWrite(MOTOR_B, LOW);
 }
 
-int readCurrent(void) {
-  return analogRead(IBATT);
+double readCurrent(void) {
+  double mV = (double)analogRead(IBATT) / 1024 * 5000;
+
+  return ((mV - AC_OFFSET) / MV_PER_AMP);
 }
 
 void setup() {
@@ -166,8 +168,9 @@ void loop() {
     // Update the dashboard
     lcd.clear();
 
-    lcd.print("iBatt:");
-    lcd.print(readCurrent(), HEX);
+    lcd.print("iBatt: ");
+    lcd.print(readCurrent(), 3);
+    lcd.print(" A");
   }
 }
 

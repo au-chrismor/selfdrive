@@ -12,3 +12,6 @@
 
 #define I2C_ADDR        0x27
 #define IBATT           (A0)
+
+#define MV_PER_AMP      66
+#define AC_OFFSET       2496
