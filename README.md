@@ -40,8 +40,6 @@ Umm... I doubt it.  I will have enough trouble with my own, but I intend to docu
 
 You would need to rework the motor control routines to interface with whatever you have, but it is something I intend to work on soon.
 
-Are you serious?  While I can't actually *stop* you doing that, 
-
 ## Can this software control a UAV (drone) or a boat?
 
 There is no position or altimetry in the code at present, so it won't control an aircraft.  Anyway, there are lots of good flight controller projects out there already.
