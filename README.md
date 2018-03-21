@@ -36,7 +36,18 @@ Yes of course.  The more the merrier.
 
 Umm... I doubt it.  I will have enough trouble with my own, but I intend to document my progress, so hopefully that will help you.
 
-## Should I put my son/daughter/pet/spouse into the car when it's done?
-
 Are you serious?  While I can't actually *stop* you doing that, I strongly advise against doing so!
 
+## Can this software be used to control a *real* car?
+
+You would need to rework the motor control routines to interface with whatever you have, but it is something I intend to work on soon.
+
+Are you serious?  While I can't actually *stop* you doing that, 
+
+## Can this software control a UAV (drone) or a boat?
+
+There is no position or altimetry in the code at present, so it won't control an aircraft.  Anyway, there are lots of good flight controller projects out there already.
+
+As for a boat, because the vision software looks for edges, while it would control the boat I don't think the steering control is going to work well.
+
+## Should I put my son/daughter/pet/spouse into the car when it's done?
