@@ -170,7 +170,7 @@ void loop() {
 
     lcd.print("iBatt: ");
     lcd.print(readCurrent(), 3);
-    lcd.print(" A");
+    lcd.print(" A  ");
   }
 }
 
