@@ -15,3 +15,6 @@
 
 #define MV_PER_AMP      66
 #define AC_OFFSET       2496
+
+#define MIN_DIST        15
+#define MAX_DISTANCE    200

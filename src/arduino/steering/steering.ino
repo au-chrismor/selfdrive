@@ -31,6 +31,8 @@
 #include <EEPROM.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include <NewPing.h>
+
 
 #include "steering-hw.h"
 
@@ -43,7 +45,12 @@ int max;        // damage to servo motor
 
 int pos = 0;    // variable to store the servo position
 
+// Initialise the LCD Dashboard
 LiquidCrystal_I2C lcd(I2C_ADDR, 16, 2);
+
+// Initialise the sonar module
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
+
 
 int ledState = 0;
 
@@ -77,6 +84,18 @@ double readCurrent(void) {
   return ((mV - AC_OFFSET) / MV_PER_AMP);
 }
 
+
+// Read distance from the ultrasonic sensor
+int getDistance() {
+  unsigned int uS = 0;
+  int cm = 0;
+  delay(70);   
+  uS = sonar.ping();
+  cm = uS / US_ROUNDTRIP_CM;
+  return cm;
+}
+
+
 void setup() {
   int val = 0;
 
@@ -89,6 +108,8 @@ void setup() {
 
   // Set up host interface
   pinMode(US_OUT, OUTPUT);
+  digitalWrite(US_OUT, LOW);
+
   Serial.begin(115200);
   
   servo.attach(SERVO_PIN, 900, 2000);   // Instantiate a servo object.  For the big servo we need to
@@ -159,6 +180,16 @@ void loop() {
       case 's':
       case 'S':
         moveStop();
+        break;
+      case 'p':
+      case 'P':
+        if(getDistance() <= MIN_DIST) {
+          // Signal the main controller we need to stop
+          digitalWrite(US_OUT, HIGH);
+        }
+        else {
+          digitalWrite(US_OUT, LOW);
+        }
         break;
       default:
         break;
