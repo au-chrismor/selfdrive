@@ -138,7 +138,7 @@ void setup() {
   // Stop everything
   moveStop();
 
-  lcd.print("Release 0.5.1");
+  lcd.print("Release 0.5.2");
 }
 
 // loop waits for a command and acts appropriately
