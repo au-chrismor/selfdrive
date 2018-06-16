@@ -8,5 +8,5 @@ GLOBALS=Makefile
 all:	videostream
 
 videostream:	videostream.cpp $(GLOBALS)
-	$(CC) -I $(INCDIR) -L $(LIBDIR) -ggdb -o videostream videostream.cpp $(LIBS)
+	$(CC) -I $(INCDIR) -L $(LIBDIR) $(DEFS) -ggdb -o videostream videostream.cpp $(LIBS)
 
