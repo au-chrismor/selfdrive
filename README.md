@@ -18,7 +18,16 @@ The car itself uses a six-volt battery and electric motor to drive a single rear
 
 ## What is the compute platform?
 
-Still up in the air at present.  I am starting out with a Raspberry Pi because I have some spare units, but if this doesn't prove sufficiently powerful, I may switch it out for an ODroid XU4, which I also have available.
+There are two compute modules in the car at present:
+
+### Main CPU
+
+This was originally a Raspberry Pi 3B+, but the comparitively low memory made it difficult to support both navigation and vision on one machine.  More recently I have changed to a FriendlyArm NanoPC-T4, it runs Ubuntu in place of Raspbian, but the code is pretty much compatible between the two.
+
+### Motion Control
+This is an Arduino Uno or similar which accepts commands from the Main CPU over a serial connection and controls the motor and steering systems.
+
+Using this method allows me to free the main CPU from effectively real-time control tasks, as well as abstracting vehicle control from the navigation and detection routines.  The platform has now been tested on both the original car and a tracked platform.
 
 In terms of the electronic interfaces for motors and the like, I will be making every effort to use off-the-shelf components.
 
