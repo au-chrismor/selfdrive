@@ -19,12 +19,21 @@
 #include <wiringPi.h>
 #endif
 #include "videostream.h"
+#ifdef _HAS_MQTT
+#include "mosquitto.h"
+#endif
 
 using namespace cv;
 using namespace std;
 
+#ifdef _HAS_MQTT
+struct mosquitto *mosq = NULL;
+bool clean_session = true;
+#endif
+
 int main(int, char**)
 {
+	char msgBuf[2048];
         int com = 0;
         
         // Set up WiringPi GPIO support
@@ -132,7 +141,40 @@ int main(int, char**)
                                 vl = (1 - fabs(k)) * speed;
                         else
                                 (1 - fabs(k)) * speed;
-                        printf("w2=%4.1f h2=%4.1f x=%f k=%f vl=%d vr=%d k=%f\n", w2, h2, x, k, vl, vr, k);
+#ifndef _HAS_MQTT
+                        printf("w2=%4.1f h2=%4.1f x=%f k=%f vl=%d vr=%d\n", w2, h2, x, k, vl, vr);
+#endif
+#ifdef _HAS_MQTT
+			mosquitto_lib_init();
+			mosq = mosquitto_new(NULL, clean_session, NULL);
+			if(!mosq)
+			{
+				printf("Out of memory!\n");
+			}
+			else
+			{
+				if(mosquitto_connect(mosq,
+						"barry.emergent.tld",
+						1883,
+						1)!= 0)
+				{
+					printf("Error connecting to broker\n");
+				}
+				else
+				{
+					sprintf(msgBuf, "{\"w2\":\"%4.1f\",\"h2\":\"%4.1f\",\"x\":\"%f\",\"k\":\"%f\",\"vl\":\"%d\",\"vr\":\"%d\"}", w2, h2, x, k, vl, vr);
+					mosquitto_publish(mosq,
+							0,
+							"data/video",
+							strlen(msgBuf),
+							msgBuf,
+							0,
+							false);
+					mosquitto_disconnect(mosq);
+				}
+			}
+			mosquitto_lib_cleanup();
+#endif
 #ifdef _HAS_GUI
                         rectangle(frame, grid[0], Scalar( 255, 255, 255), 2, 8); //bottom
                         rectangle(frame, grid[1], Scalar( 255, 0, 0), 2, 8); //top
