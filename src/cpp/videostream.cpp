@@ -63,17 +63,30 @@ int main(int, char**)
 	}
 	else
 	{
-		if(mosquitto_connect(mosq,
-				"barry.emergent.tld",                   
-				1883,                                   
-				60)!= 0)
-		{
-			printf("Error connecting to broker\n");
-			connected = 0;
-		}
-		else
-			connected = 1;
-	}
+                if(mosquitto_tls_set(mosq,
+                                "cafile.pem",
+                                "./certs",
+                                "certfile.pem",
+                                "keyfile.pem",
+                                NULL) != 0)
+                {
+                        printf("Error initialising SSL");
+                        connected = 0;
+                }
+                else
+                {
+                        if(mosquitto_connect(mosq,
+                                "a3nfa3xmcmdmdt-ats.iot.ap-southeast-2.amazonaws.com",
+                                8883,
+                                60)!= 0)
+                                {
+                                        printf("Error connecting to broker\n");
+                                        connected = 0;
+                                }
+                                else
+                                        connected = 1;
+                }
+        }
 #endif
         Mat frame, frame1;
         //--- INITIALIZE VIDEOCAPTURE
