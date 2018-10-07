@@ -5,7 +5,7 @@ LIBDIR=/usr/local/lib
 LIBS=-lstdc++ -lopencv_core -lopencv_highgui -lopencv_videoio -lopencv_imgproc -lmosquitto
 #DEFS=-D_HAS_SERIAL
 #DEFS=-D_HAS_GUI
-#DEFS=-D_HAS_MQTT
+DEFS=-D_HAS_MQTT
 GLOBALS=Makefile
 
 all:videostream

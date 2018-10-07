@@ -35,6 +35,7 @@ int main(int, char**)
 {
 	char msgBuf[2048];
         int com = 0;
+	int connected = 0;
         
         // Set up WiringPi GPIO support
         // Use ...SetupSys() instead of ...Setup() so we don't need root
@@ -50,6 +51,29 @@ int main(int, char**)
                 printf("Error %d opening serial line\n", errno);
                 return -1;
         }
+#endif
+
+#ifdef _HAS_MQTT
+	mosquitto_lib_init();
+	mosq = mosquitto_new(NULL, clean_session, NULL);
+	if(!mosq)
+	{
+		printf("Out of memory for mosquitto\n");
+		connected = 0;
+	}
+	else
+	{
+		if(mosquitto_connect(mosq,
+				"barry.emergent.tld",                   
+				1883,                                   
+				60)!= 0)
+		{
+			printf("Error connecting to broker\n");
+			connected = 0;
+		}
+		else
+			connected = 1;
+	}
 #endif
         Mat frame, frame1;
         //--- INITIALIZE VIDEOCAPTURE
@@ -133,7 +157,7 @@ int main(int, char**)
                         float w2 = frame.cols / 2.0f;
                         float h2 = frame.rows / 2.0f;
                         float k = (w2 - x) / w2 * 2;
-                        int speed = 35;
+                        int speed = 512;
                         int vr = speed;
                         int vl = speed;
                         
@@ -145,35 +169,17 @@ int main(int, char**)
                         printf("w2=%4.1f h2=%4.1f x=%f k=%f vl=%d vr=%d\n", w2, h2, x, k, vl, vr);
 #endif
 #ifdef _HAS_MQTT
-			mosquitto_lib_init();
-			mosq = mosquitto_new(NULL, clean_session, NULL);
-			if(!mosq)
+			if(connected != 0)
 			{
-				printf("Out of memory!\n");
+				sprintf(msgBuf, "{\"x\":\"%f\",\"k\":\"%f\",\"vl\":\"%d\",\"vr\":\"%d\"}", x, k, vl, vr);
+				mosquitto_publish(mosq,
+						0,
+						"data/video",
+						strlen(msgBuf),
+						msgBuf,
+						0,
+						false);
 			}
-			else
-			{
-				if(mosquitto_connect(mosq,
-						"barry.emergent.tld",
-						1883,
-						1)!= 0)
-				{
-					printf("Error connecting to broker\n");
-				}
-				else
-				{
-					sprintf(msgBuf, "{\"w2\":\"%4.1f\",\"h2\":\"%4.1f\",\"x\":\"%f\",\"k\":\"%f\",\"vl\":\"%d\",\"vr\":\"%d\"}", w2, h2, x, k, vl, vr);
-					mosquitto_publish(mosq,
-							0,
-							"data/video",
-							strlen(msgBuf),
-							msgBuf,
-							0,
-							false);
-					mosquitto_disconnect(mosq);
-				}
-			}
-			mosquitto_lib_cleanup();
 #endif
 #ifdef _HAS_GUI
                         rectangle(frame, grid[0], Scalar( 255, 255, 255), 2, 8); //bottom
