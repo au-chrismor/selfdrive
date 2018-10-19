@@ -11,9 +11,12 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 #ifdef _HAS_SERIAL
-#include <wiringSerial.h>
+#include <libserialport.h>
+struct sp_port *port;
+
 #endif
 #ifdef _HAS_WIRING
 #include <wiringPi.h>
@@ -36,6 +39,7 @@ int main(int, char**)
 	char msgBuf[2048];
         int com = 0;
 	int connected = 0;
+	char cmdBuf[2048];
         
         // Set up WiringPi GPIO support
         // Use ...SetupSys() instead of ...Setup() so we don't need root
@@ -45,12 +49,27 @@ int main(int, char**)
 #endif        
 
 #ifdef _HAS_SERIAL
-        com = serialOpen("/dev/ttyAMA0", 115200);
-        if(com == -1)
-        {
-                printf("Error %d opening serial line\n", errno);
-                return -1;
-        }
+	// Initialise the serial port
+	sp_return serial_err = sp_get_port_by_name(HOST_PORT, &port);
+	if(serial_err == SP_OK)
+	{
+		serial_err = sp_open(port, SP_MODE_READ_WRITE);
+		if(serial_err == SP_OK)
+		{
+			printf("Port opened\n");
+			sp_set_baudrate(port, 115200);
+		}
+		else
+		{
+			printf("Error %d opening port %s\n", serial_err, HOST_PORT);
+			return -1;
+		}
+	}
+	else
+	{
+		printf("Serial init failed: %d\n", serial_err);
+		return -1;
+	}
 #endif
 
 #ifdef _HAS_MQTT
@@ -63,30 +82,17 @@ int main(int, char**)
 	}
 	else
 	{
-                if(mosquitto_tls_set(mosq,
-                                "cafile.pem",
-                                "./certs",
-                                "certfile.pem",
-                                "keyfile.pem",
-                                NULL) != 0)
-                {
-                        printf("Error initialising SSL");
-                        connected = 0;
-                }
-                else
-                {
-                        if(mosquitto_connect(mosq,
-                                "a3nfa3xmcmdmdt-ats.iot.ap-southeast-2.amazonaws.com",
-                                8883,
-                                60)!= 0)
-                                {
-                                        printf("Error connecting to broker\n");
-                                        connected = 0;
-                                }
-                                else
-                                        connected = 1;
-                }
-        }
+		if(mosquitto_connect(mosq,
+				"barry.emergent.tld",                   
+				1883,                                   
+				60)!= 0)
+		{
+			printf("Error connecting to broker\n");
+			connected = 0;
+		}
+		else
+			connected = 1;
+	}
 #endif
         Mat frame, frame1;
         //--- INITIALIZE VIDEOCAPTURE
@@ -170,7 +176,7 @@ int main(int, char**)
                         float w2 = frame.cols / 2.0f;
                         float h2 = frame.rows / 2.0f;
                         float k = (w2 - x) / w2 * 2;
-                        int speed = 512;
+                        int speed = 384;
                         int vr = speed;
                         int vl = speed;
                         
@@ -209,17 +215,18 @@ int main(int, char**)
 #endif
 
 #ifdef _HAS_SERIAL
-                        // Send the command to our steering controller
-                        if (k > 0)
-                        {
-                                serialPutchar(com, '.');
-                        }
-                        else if (k < 0)
-                        {
-                                serialPutchar(com, ',');
-                        }
-                        serialPutchar(com, 'f');        // Move
-                        serialPutchar(com, 'p');        // Look for an obstacle
+			memset(cmdBuf, 0x00, 2048);
+			sprintf(cmdBuf,"L:%d", vl);
+			serial_err = sp_nonblocking_write(port,
+				&cmdBuf,
+				strlen(cmdBuf));
+			sp_flush(port, SP_BUF_BOTH);
+			memset(cmdBuf, 0x00, 2048);
+			sprintf(cmdBuf,"R:%d", vr);
+			serial_err = sp_nonblocking_write(port,
+				&cmdBuf,
+				strlen(cmdBuf));
+			sp_flush(port, SP_BUF_BOTH);
 #endif
                 }
                 else
@@ -227,7 +234,7 @@ int main(int, char**)
                         printf("Wait for obstacle\n");
                         // See if it has cleared yet
 #ifdef _HAS_SERIAL                        
-                        serialPutchar(com, 'p');
+                        //serialPutchar(com, 'p');
 #endif                        
                 }
         }

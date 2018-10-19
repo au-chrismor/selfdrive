@@ -29,3 +29,6 @@ GND                 39      40  GPIO21 / SPI 1 SCLK
 
 #define US_INPUT    16  // Ultrasonic signal from Arduino
 
+#ifdef _HAS_SERIAL
+#define HOST_PORT "/dev/ttyS4"
+#endif
