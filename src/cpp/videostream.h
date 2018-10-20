@@ -32,3 +32,11 @@ GND                 39      40  GPIO21 / SPI 1 SCLK
 #ifdef _HAS_SERIAL
 #define HOST_PORT "/dev/ttyS4"
 #endif
+
+#ifdef _HAS_MQTT
+#define MQTT_HOST   "barry.emergent.tld"
+#define MQTT_PORT   1883
+#endif
+
+/* I2C Definitions */
+#define MC5883_ADDR 0x1E

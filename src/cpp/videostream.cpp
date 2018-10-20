@@ -3,6 +3,7 @@
     This is original work contains products developed by other organisations
     including, but not limited to:
     OpenCV
+    sigrok.org (libserialport)
 
     This was originally written for the Raspberry Pi, but I am gradually
     adapting it to the NanoPC T4 from FriendlyArm.  Mostly because the
@@ -40,13 +41,13 @@ int main(int, char**)
         int com = 0;
 	int connected = 0;
 	char cmdBuf[2048];
-        
+
         // Set up WiringPi GPIO support
         // Use ...SetupSys() instead of ...Setup() so we don't need root
-#ifdef _HAS_WIRING        
+#ifdef _HAS_WIRING
         wiringPiSetupSys();
         pinMode(US_INPUT, INPUT);
-#endif        
+#endif
 
 #ifdef _HAS_SERIAL
 	// Initialise the serial port
@@ -83,8 +84,8 @@ int main(int, char**)
 	else
 	{
 		if(mosquitto_connect(mosq,
-				"barry.emergent.tld",                   
-				1883,                                   
+				MQTT_HOST,
+				MQTT_PORT,
 				60)!= 0)
 		{
 			printf("Error connecting to broker\n");
@@ -122,12 +123,12 @@ int main(int, char**)
                 << "Press any key to terminate" << endl;
         for (;;)
         {
-#ifdef _HAS_WIRING                
+#ifdef _HAS_WIRING
                 // Check and see if we have an obstruction first
                 if(digitalRead(US_INPUT) == LOW)
 #else
                 if(1)
-#endif                                
+#endif
                 {
                         // wait for a new frame from camera and store it into 'frame'
                         cap.read(frame);
@@ -148,7 +149,7 @@ int main(int, char**)
                         threshold(frame1, frame1, 125, 255, THRESH_BINARY);
                         cv::erode(frame1, frame1, Mat());
                         cv::erode(frame1, frame1, Mat());
-                        
+
                         std::vector<Rect> grid;
                         grid.push_back(Rect(Point(0, frame.rows - 200), Point(frame.cols, frame.rows - 150)));   //Rectangle bottom
                         grid.push_back(Rect(Point(160, frame.rows - 300), Point(480, frame.rows - 250)));   //Rectangle top
@@ -160,26 +161,26 @@ int main(int, char**)
                         Moments m = moments(frame1(grid[0]), false);   //layer bottom
                         float x = m.m10 / m.m00;
                         float y = m.m01 / m.m00;
-                        
+
                         Moments m2 = moments(frame1(grid[1]), false);    //layer top
                         float x2 = m2.m10 / m2.m00;
                         float y2 = m2.m01 / m2.m00;
-                        
+
                         Moments mLeft = moments(frame1(grid[2]), false);   //left
                         float xLeft = mLeft.m10 / mLeft.m00;
                         float yLeft = mLeft.m01 / mLeft.m00;
-                        
+
                         Moments mRight = moments(frame1(grid[3]), false);   //right
                         float xRight = mLeft.m10 / mLeft.m00;
                         float yRight = mLeft.m01 / mLeft.m00;
-                        
+
                         float w2 = frame.cols / 2.0f;
                         float h2 = frame.rows / 2.0f;
                         float k = (w2 - x) / w2 * 2;
                         int speed = 700;
                         int vr = speed;
                         int vl = speed;
-                        
+
                         if (k >= 0)
                                 vl = (1 - fabs(k)) * speed;
                         else
@@ -205,7 +206,7 @@ int main(int, char**)
                         rectangle(frame, grid[1], Scalar( 255, 0, 0), 2, 8); //top
                         rectangle(frame, grid[2], Scalar( 0, 0, 255), 2, 8); //left
                         rectangle(frame, grid[3], Scalar( 0, 0, 255), 2, 8); //right
-                        
+
                         circle(frame, Point(xLeft, frame.rows - 250 - yLeft), 10, Scalar(0, 0, 255), 3, 8); //left
                         circle(frame, Point(xRight + 480, frame.rows - 250 - yRight), 10, Scalar(0, 0, 255), 3, 8); //right
                         circle(frame, Point(x + 100, frame.rows - 150 - y), 10, Scalar( 255, 255, 255), 3, 8); //bottom
@@ -238,9 +239,9 @@ int main(int, char**)
                 {
                         printf("Wait for obstacle\n");
                         // See if it has cleared yet
-#ifdef _HAS_SERIAL                        
+#ifdef _HAS_SERIAL
                         //serialPutchar(com, 'p');
-#endif                        
+#endif
                 }
         }
         // the camera will be deinitialized automatically in VideoCapture destructor
