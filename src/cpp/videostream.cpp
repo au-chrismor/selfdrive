@@ -57,7 +57,7 @@ int main(int, char**)
 		if(serial_err == SP_OK)
 		{
 			printf("Port opened\n");
-			sp_set_baudrate(port, 115200);
+			sp_set_baudrate(port, 9600);
 		}
 		else
 		{
@@ -176,7 +176,7 @@ int main(int, char**)
                         float w2 = frame.cols / 2.0f;
                         float h2 = frame.rows / 2.0f;
                         float k = (w2 - x) / w2 * 2;
-                        int speed = 384;
+                        int speed = 700;
                         int vr = speed;
                         int vl = speed;
                         
@@ -216,17 +216,22 @@ int main(int, char**)
 
 #ifdef _HAS_SERIAL
 			memset(cmdBuf, 0x00, 2048);
-			sprintf(cmdBuf,"L:%d", vl);
+			sprintf(cmdBuf,"R:%d", vl);
 			serial_err = sp_nonblocking_write(port,
 				&cmdBuf,
 				strlen(cmdBuf));
+//                        printf("Sent %d", serial_err);
 			sp_flush(port, SP_BUF_BOTH);
+			while((serial_err = sp_input_waiting(port)) <= 0);
 			memset(cmdBuf, 0x00, 2048);
-			sprintf(cmdBuf,"R:%d", vr);
+			sprintf(cmdBuf,"L:%d", vr);
 			serial_err = sp_nonblocking_write(port,
 				&cmdBuf,
 				strlen(cmdBuf));
+//                        printf("Sent %d", serial_err);
+			while((serial_err = sp_input_waiting(port)) <= 0);
 			sp_flush(port, SP_BUF_BOTH);
+
 #endif
                 }
                 else

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 		if(error == SP_OK)
 		{
 			printf("Opened port\n");
-			sp_set_baudrate(port, 115200);
+			sp_set_baudrate(port, 9600);
 
 			memcpy(buffer, "L:512",strlen("L:512"));
 			error = sp_blocking_write(port,
@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
 				strlen(buffer),
 				500);
 			printf("Return: %d\n", error);
-			sp_drain(port);
+			while((error = sp_input_waiting(port)) <= 0);
+			printf("Buffer Waiting = %d\n", error);
 			memset(buffer,0x00, 255); 
 			memcpy(buffer, "R:512",strlen("R:512"));
 			error = sp_blocking_write(port,
@@ -50,7 +51,8 @@ int main(int argc, char *argv[])
 				strlen(buffer),
 				500);
 			printf("Return: %d\n", error);
-			sp_drain(port);
+			error = sp_input_waiting(port);
+			printf("Buffer Waiting = %d\n", error);
 			
 			sp_close(port);
 		}

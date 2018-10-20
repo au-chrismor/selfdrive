@@ -14,5 +14,5 @@ videostream:videostream.cpp $(GLOBALS)
 	$(CC) $(DEFS) -I $(INCDIR) -L $(LIBDIR) -ggdb -o videostream videostream.cpp $(LIBS)
 
 serialtest:serialtest.cpp $(GLOBALS)
-	$(CC) $(DEFS) -I $(INCDIR) -L $(LIBDIR) -ggdb -o serialtest serialtest.cpp -lserialport
+	$(CC) $(DEFS) -I $(INCDIR) -L $(LIBDIR) -ggdb -o serialtest serialtest.cpp -lstdc++ -lserialport
 
