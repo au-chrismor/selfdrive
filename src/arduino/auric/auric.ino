@@ -1,6 +1,6 @@
 
 #include "features.h"
-#include "rover_hw.h"
+#include "auric_hw.h"
 
 int ledState = 0;
 int speedL = 0;
