@@ -32,7 +32,7 @@ char Channel(String buffer) {
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(19200);
 #ifdef _NODEMCU  
   pinMode(PWMA, OUTPUT);
   pinMode(PWMB, OUTPUT);
@@ -101,15 +101,15 @@ void loop()
 #ifdef _NODEMCU
 void Stop()
 {
-  digitalWrite(PWMA,LOW);
-  digitalWrite(PWMB, LOW);
+  digitalWrite(PWMA,0);
+  digitalWrite(PWMB, 0);
   digitalWrite(DIRA, LOW);
   digitalWrite(DIRB, LOW);
 }
 
 void DiffFwd(int leftVal, int rightVal)
 {
-  digitalWrite(DIRA,LOW);
+  digitalWrite(DIRA,HIGH);
   digitalWrite(DIRB,HIGH);
   analogWrite(PWMA, leftVal);
   analogWrite(PWMB, rightVal);
@@ -117,7 +117,7 @@ void DiffFwd(int leftVal, int rightVal)
 
 void DiffRev(int leftVal, int rightVal)
 {
-  digitalWrite(DIRA,HIGH);
+  digitalWrite(DIRA,LOW);
   digitalWrite(DIRB,LOW);
   analogWrite(PWMA, leftVal);
   analogWrite(PWMB, rightVal);
