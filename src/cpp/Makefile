@@ -8,7 +8,7 @@ DEFS+=-D_HAS_SERIAL
 #DEFS+=-D_HAS_MQTT
 GLOBALS=Makefile
 
-all:videostream serialtest
+all:videostream stop serialtest
 
 videostream:videostream.cpp $(GLOBALS)
 	$(CC) $(DEFS) -I $(INCDIR) -L $(LIBDIR) -ggdb -o videostream videostream.cpp $(LIBS)
@@ -16,3 +16,5 @@ videostream:videostream.cpp $(GLOBALS)
 serialtest:serialtest.cpp $(GLOBALS)
 	$(CC) $(DEFS) -I $(INCDIR) -L $(LIBDIR) -ggdb -o serialtest serialtest.cpp -lstdc++ -lserialport
 
+stop:stop.cpp $(GLOBALS)
+	$(CC) $(DEFS) -I $(INCDIR) -L $(LIBDIR) -ggdb -o stop stop.cpp $(LIBS)
