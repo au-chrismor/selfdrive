@@ -131,11 +131,11 @@ int main(int, char**)
                 // Send the command to our steering controller
                 if (k > 0)
                 {
-                        serialPutchar(com, '.');
+                        serialPutchar(com, ',');
                 }
                 else if (k < 0)
                 {
-                        serialPutchar(com, ',');
+                        serialPutchar(com, '.');
                 }
                 serialPutchar(com, 'f');        // Move
                 serialPutchar(com, 'p');        // Look for an obstacle

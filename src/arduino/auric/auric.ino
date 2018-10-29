@@ -39,14 +39,6 @@ void setup()
   pinMode(DIRA, OUTPUT);
   pinMode(DIRB, OUTPUT);
 #endif
-#ifdef _UNO
-  pinMode(PWMA, OUTPUT);
-  pinMode(PWMB, OUTPUT);
-  pinMode(DIRA1, OUTPUT);
-  pinMode(DIRA2, OUTPUT);
-  pinMode(DIRB1, OUTPUT);
-  pinMode(DIRB2, OUTPUT);
-#endif  
   pinMode(LED_BUILTIN, OUTPUT);
   Stop();
 }
@@ -54,21 +46,29 @@ void setup()
 void loop()
 {
 #ifdef BURN_IN
-  Forward();
+  digitalWrite(LED_BUILTIN, 1);
+  Forward(255);
   delay(2000);
-  stop();
+  digitalWrite(LED_BUILTIN, 0);
+  Stop();
   delay(1000);
-  Reverse();
+  digitalWrite(LED_BUILTIN, 1);
+  Reverse(255);
   delay(2000);
-  stop();
+  digitalWrite(LED_BUILTIN, 0);
+  Stop();
   delay(1000);
-  Left();
+  digitalWrite(LED_BUILTIN, 1);
+  Left(255);
   delay(2000);
-  stop();
+  digitalWrite(LED_BUILTIN, 0);
+  Stop();
   delay(1000);
-  Right();
+  digitalWrite(LED_BUILTIN, 1);
+  Right(255);
   delay(2000);
-  stop();
+  digitalWrite(LED_BUILTIN, 0);
+  Stop();
   delay(1000);
 #endif
   if(Serial.available() > 0)
@@ -158,71 +158,56 @@ void Right(int speedVal)
 #ifdef _UNO
 void Stop()
 {
-  analogWrite(PWMA, 0);
-  analogWrite(PWMB, 0);
-  digitalWrite(DIRA1, LOW);
-  digitalWrite(DIRA2, LOW);
-  digitalWrite(DIRB1, LOW);
-  digitalWrite(DIRB2, LOW);
+  motorLeft.setSpeed(0);
+  motorRight.setSpeed(0);
 }
 
 void DiffFwd(int leftVal, int rightVal)
 {
-  digitalWrite(DIRA1,HIGH);
-  digitalWrite(DIRA2,LOW);
-  digitalWrite(DIRB1,HIGH);
-  digitalWrite(DIRB2,LOW);
-  analogWrite(PWMA, leftVal);
-  analogWrite(PWMB, rightVal);
+  motorLeft.setSpeed(leftVal);
+  motorRight.setSpeed(rightVal);
+  motorLeft.run(FORWARD);
+  motorRight.run(FORWARD);
 }
 
 void DiffRev(int leftVal, int rightVal)
 {
-  digitalWrite(DIRA1,LOW);
-  digitalWrite(DIRA1,HIGH);
-  digitalWrite(DIRB1,LOW);
-  digitalWrite(DIRB1,HIGH);
-  analogWrite(PWMA, leftVal);
-  analogWrite(PWMB, rightVal);
+  motorLeft.setSpeed(leftVal);
+  motorRight.setSpeed(rightVal);
+  motorLeft.run(BACKWARD);
+  motorRight.run(BACKWARD);
 }
 
 void Forward(int speedVal)
 {
-  digitalWrite(DIRA1,HIGH);
-  digitalWrite(DIRA2,LOW);
-  digitalWrite(DIRB1,HIGH);
-  digitalWrite(DIRB2,LOW);
-  analogWrite(PWMA, speedVal);
-  analogWrite(PWMB, speedVal);
+  motorLeft.setSpeed(speedVal);
+  motorRight.setSpeed(speedVal);
+  motorLeft.run(FORWARD);
+  motorRight.run(FORWARD);
 }
 
 void Reverse(int speedVal)
 {
-  digitalWrite(DIRA1,LOW);
-  digitalWrite(DIRA1,HIGH);
-  digitalWrite(DIRB1,LOW);
-  digitalWrite(DIRB1,HIGH);
-  analogWrite(PWMA, speedVal);
-  analogWrite(PWMB, speedVal);
+  motorLeft.setSpeed(speedVal);
+  motorRight.setSpeed(speedVal);
+  motorLeft.run(BACKWARD);
+  motorRight.run(BACKWARD);
 }
 
 void Left(int speedVal)
 {
-  digitalWrite(DIRA1,LOW);
-  digitalWrite(DIRA1,HIGH);
-  digitalWrite(DIRB1,HIGH);
-  digitalWrite(DIRB2,LOW);
-  analogWrite(PWMA, speedVal);
-  analogWrite(PWMB, speedVal);
+  motorLeft.setSpeed(speedVal);
+  motorRight.setSpeed(speedVal);
+  motorLeft.run(BACKWARD);
+  motorRight.run(FORWARD);
 }
 
 void Right(int speedVal)
 {
-  digitalWrite(DIRA1,HIGH);
-  digitalWrite(DIRA2,LOW);
-  digitalWrite(DIRB1,LOW);
-  digitalWrite(DIRB1,HIGH);
-  analogWrite(PWMA, speedVal);
-  analogWrite(PWMB, speedVal);
+  motorLeft.setSpeed(speedVal);
+  motorRight.setSpeed(speedVal);
+  motorLeft.run(FORWARD);
+  motorRight.run(BACKWARD);
 }
 #endif
+
