@@ -1,23 +1,22 @@
-#define BRAKEVCC 0
-#define CW   1
-#define CCW  2
-#define BRAKEGND 3
-#define CS_THRESHOLD 100
 
-/*  VNH2SP30 pin definitions
- xxx[0] controls '1' outputs
- xxx[1] controls '2' outputs */
-int inApin[2] = {7, 4};  // INA: Clockwise input
-int inBpin[2] = {8, 9}; // INB: Counter-clockwise input
-int pwmpin[2] = {5, 6}; // PWM input
-int cspin[2] = {2, 3}; // CS: Current sense ANALOG input
-int enpin[2] = {0, 1}; // EN: Status of switches output (Analog pin)
-int statpin = 13;
+/*
+    Copyright (C) 2018, by Christopher F. Moran and Emergent Technology
+    This is original work contains products developed by other organisations
+    including, but not limited to:
+    adafruit
+    Tmr0
+
+    This version assumes the use of an Arduino Mega2650 because we need
+    to use multiple serial ports.
+ */
+
+#include "features.h"
+#include "auric_hw.h"
 
 
 void setup()
 {
-  pinMode(statpin, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
   // Initialize digital pins as outputs
   for (int i=0; i<2; i++)
   {
@@ -31,7 +30,7 @@ void setup()
     digitalWrite(inApin[i], LOW);
     digitalWrite(inBpin[i], LOW);
   }
-  digitalWrite(statpin, HIGH);
+  digitalWrite(LED_BUILTIN, HIGH);
   Serial.begin(57600);      //the connection to the computer via USB
   Serial1.begin(57600);     //serial is the bluetooth from the controller
 }    
@@ -191,4 +190,3 @@ void motorGo(uint8_t motor, uint8_t direct, uint8_t pwm)
 //    motoroff = true;    
 //  }  
 //  delay(5);
-

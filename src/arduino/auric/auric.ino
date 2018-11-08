@@ -1,4 +1,9 @@
-
+/*
+    Copyright (C) 2018, by Christopher F. Moran and Emergent Technology
+    This is original work contains products developed by other organisations
+    including, but not limited to:
+    Adafruit
+ */
 #include "features.h"
 #include "auric_hw.h"
 
