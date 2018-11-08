@@ -9,6 +9,6 @@
 
 // #define BURN_IN
 
-// #define NRF24L01
+#define NRF24L01
 // #define OLED
 // #define POWER_MON
