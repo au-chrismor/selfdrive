@@ -8,7 +8,7 @@ Everyone else seems to be working on self-driving vehicles at the moment, so I w
 
 Yes.  You can follow the progress, and even offer comments and suggestions at
 
-https://nowwhywouldyoudothat.blogspot.com.au/2018/02/diy-self-driving.html
+https://blog.nowwhywouldyoudothat.com/2018/02/diy-self-driving.html
 
 ## What is your car?
 
