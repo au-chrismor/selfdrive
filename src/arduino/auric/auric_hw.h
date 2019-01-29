@@ -8,7 +8,11 @@
 #endif
 
 #ifdef _UNO
-#include <AFMotor.h>
-AF_DCMotor motorLeft(1, MOTOR12_1KHZ);
-AF_DCMotor motorRight(3, MOTOR12_1KHZ);
+#define DIRA    12  // Motor A Direction
+#define BRKA    9   // Motor A Brake
+#define PWMA    3
+
+#define DIRB    13  // Motor A Direction
+#define BRKB    8   // Motor A Brake
+#define PWMB    11
 #endif
