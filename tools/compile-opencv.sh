@@ -9,5 +9,5 @@ mkdir ~/src/opencv-3.4.3/build
 cd ~/src/opencv-3.4.3/build
 cmake -D CMAKE_BUILD_PATH=/usr/local -D CMAKE_BUILD_TYPE=Release -D BUILD_EXAMPLES=OFF -D PYTHON3_EXECUTABLE=`which python3` -D BUILD_EXAMPLES=OFF -D HAVE_CUDA=NO -D BUILD_DOCS=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_TESTS=OFF -D WITH_V4L=YES -D WITH_LIBV4L=YES -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-3.4.3/modules ..
 make
-make install
+sudo make install
 
