@@ -18,7 +18,16 @@ The car itself uses a six-volt battery and electric motor to drive a single rear
 
 ## What is the compute platform?
 
-Still up in the air at present.  I am starting out with a Raspberry Pi because I have some spare units, but if this doesn't prove sufficiently powerful, I may switch it out for an ODroid XU4, which I also have available.
+There are two compute modules in the car at present:
+
+### Main CPU
+
+This was originally a Raspberry Pi 3B+, but the comparitively low memory made it difficult to support both navigation and vision on one machine.  More recently I have changed to a FriendlyArm NanoPC-T4, it runs Ubuntu in place of Raspbian, but the code is pretty much compatible between the two.
+
+### Motion Control
+This is an Arduino Uno or similar which accepts commands from the Main CPU over a serial connection and controls the motor and steering systems.
+
+Using this method allows me to free the main CPU from effectively real-time control tasks, as well as abstracting vehicle control from the navigation and detection routines.  The platform has now been tested on both the original car and a tracked platform.
 
 In terms of the electronic interfaces for motors and the like, I will be making every effort to use off-the-shelf components.
 
@@ -36,7 +45,16 @@ Yes of course.  The more the merrier.
 
 Umm... I doubt it.  I will have enough trouble with my own, but I intend to document my progress, so hopefully that will help you.
 
+## Can this software be used to control a *real* car?
+
+You would need to rework the motor control routines to interface with whatever you have, but it is something I intend to work on soon.
+
+## Can this software control a UAV (drone) or a boat?
+
+There is no position or altimetry in the code at present, so it won't control an aircraft.  Anyway, there are lots of good flight controller projects out there already.
+
+As for a boat, because the vision software looks for edges, while it would control the boat I don't think the steering control is going to work well.
+
 ## Should I put my son/daughter/pet/spouse into the car when it's done?
 
 Are you serious?  While I can't actually *stop* you doing that, I strongly advise against doing so!
-
