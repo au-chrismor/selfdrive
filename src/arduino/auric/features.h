@@ -6,8 +6,8 @@
 // It must be the first header file included
 
 #define DEBUG
-// #define _UNO
-#define _NODEMCU
+#define _UNO
+// #define _NODEMCU
 // #define BURN_IN
 
 // #define NRF24L01
