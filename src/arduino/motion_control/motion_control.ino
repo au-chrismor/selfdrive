@@ -39,8 +39,10 @@ void setup()
 long t0 = 0;
 bool motoroff = true;
 bool modeGamepad = false;
+bool ledState = false;
 
 void loop() {
+  digitalWrite(LED_BUILTIN, ledState);
   long t1 = millis();
   int n = Serial1.available();
   if (n >= 4) {
@@ -81,6 +83,8 @@ void loop() {
     motoroff = true;    
   }  
   delay(10);
+
+  ledState = !ledState;
 }
 
 
