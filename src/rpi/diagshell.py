@@ -1,15 +1,21 @@
 import RPi.GPIO as GPIO
 import time
-def getInput(prompt):
+
+MSG_AVAILABLE_COMMANDS = 'Available commands:'
+MSG_AVAILABLE_CONTEXTS = 'Available contexts:'
+
+
+def get_input(prompt):
 	cmd = input(prompt + '> ')
 	return cmd
 
-def motorContext():
+
+def motor_context():
 	state = True
 	while state:
-		command = getInput('motor')
+		command = get_input('motor')
 		if command == 'help':
-			print('Available commands:')
+			print(MSG_AVAILABLE_COMMANDS)
 			print('fwd - Run motor forward')
 			print('rev - Run motor backwards')
 			print('stop - Stop motor')
@@ -26,32 +32,35 @@ def motorContext():
 		elif command == 'exit':
 			state = False
 
-def sensorContext():
+
+def sensor_context():
 	state = True
 	while state:
-		command = getInput('sensor')
+		command = get_input('sensor')
 		if command == 'help':
-			print('Available commands:')
+			print(MSG_AVAILABLE_COMMANDS)
 			print('exit')
 		elif command == 'exit':
 			state = False
 
-def trainContext():
+
+def train_context():
 	state = True
 	while state:
-		command = getInput('train')
+		command = get_input('train')
 		if command == 'help':
-			print('Available commands:')
+			print(MSG_AVAILABLE_COMMANDS)
 			print('exit')
 		elif command == 'exit':
 			state = False
 
-def driveContext():
+
+def drive_context():
 	state = True
 	while state:
-		command = getInput('drive')
+		command = get_input('drive')
 		if command == 'help':
-			print('Available commands:')
+			print(MSG_AVAILABLE_COMMANDS)
 			print('exit')
 		elif command == 'exit':
 			state = False
@@ -70,9 +79,9 @@ GPIO.output(7, GPIO.LOW)
 
 
 while state:
-	command = getInput('')
+	command = get_input('')
 	if command == 'help':
-		print('Available contexts:')
+		print(MSG_AVAILABLE_CONTEXTS)
 		print('motor - Select the \'Motor\' context')
 		print('sensor - Select the \'Sensor\' context')
 		print('train - Select the \'Training\' context for camera module')
@@ -80,8 +89,8 @@ while state:
 	elif command == 'exit':
 		state = False
 	elif command == 'motor':
-		motorContext()
+		motor_context()
 	elif command == 'sensor':
-		sensorContext()
+		sensor_context()
 
 
