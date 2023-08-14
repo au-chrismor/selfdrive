@@ -5,7 +5,7 @@ import cv2
 def process_image(image):
     (h, w, d) = image.shape
     print("width={}, height={}, depth={}".format(w, h, d))
-    #roi = image[0:480, 0:1280]
+    roi = image[0:480, 0:1280]
     roi1 = image[0:480, 0:639]
 
     grey = cv2.cvtColor(roi1, cv2.COLOR_BGR2GRAY)
