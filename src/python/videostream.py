@@ -2,7 +2,7 @@
 #
 import cv2
 
-def processImage(image):
+def process_image(image):
     (h, w, d) = image.shape
     print("width={}, height={}, depth={}".format(w, h, d))
     #roi = image[0:480, 0:1280]
@@ -13,4 +13,4 @@ def processImage(image):
     cv2.imshow("Grey", grey)
     cv2.waitKey(0)
 
-processImage(cv2.imread("image.jpg"))
+process_image(cv2.imread("image.jpg"))
