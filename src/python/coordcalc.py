@@ -5,41 +5,41 @@ import math
 # Radius of the Earth is approximately 6,371Km
 radius = 6371000
 
-def calc_distance(startLat, startLong, endLat, endLong):
-    startPhi = math.radians(startLat)
-    endPhi = math.radians(endLat)
-    deltaLat = math.radians((endLat - startLat))
-    detalLong = math .radians((endLong - startLong))
+def calc_distance(start_lat, start_long, end_lat, end_long):
+    start_phi = math.radians(start_lat)
+    end_phi = math.radians(end_lat)
+    delta_lat = math.radians((end_lat - start_lat))
+    delta_long = math .radians((end_long - start_long))
 
-    a = math.sin(deltaLat / 2) * math.sin(deltaLat / 2) + math.cos(startPhi) * math.cos(endPhi) * math.sin(detalLong / 2) * math.sin(detalLong / 2)
+    a = math.sin(delta_lat / 2) * math.sin(delta_lat / 2) + math.cos(start_phi) * math.cos(end_phi) * math.sin(delta_long / 2) * math.sin(delta_long / 2)
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
     dist = radius * c
     return dist
 
-def calc_bearing(startLat, startLong, endLat, endLong):
-    y = math.sin(math.radians(endLong)-math.radians(startLong)) * math.cos(math.radians(endLat))
-    x = math.cos(math.radians(startLat))*math.sin(math.radians(endLat)) - math.sin(math.radians(startLat))*math.cos(math.radians(endLat))*math.cos(math.radians(endLong)-math.radians(startLong))
+def calc_bearing(start_lat, start_long, end_lat, end_long):
+    y = math.sin(math.radians(end_long)-math.radians(start_long)) * math.cos(math.radians(end_lat))
+    x = math.cos(math.radians(start_lat))*math.sin(math.radians(end_lat)) - math.sin(math.radians(start_lat))*math.cos(math.radians(end_lat))*math.cos(math.radians(end_long)-math.radians(start_long))
     bearing = math.degrees(math.atan2(y, x))
     if bearing < 0:
         bearing = 360 + bearing
     return bearing
 
-def calc_midpoint(startLat, startLong, endLat, endLong):
+def calc_midpoint(start_lat, start_long, end_lat, end_long):
     ret = []
-    bX = math.cos(math.radians(endLat)) * math.cos(math.radians(endLong)-math.radians(startLong))
-    bY = math.cos(math.radians(endLat)) * math.sin(math.radians(endLong)-math.radians(startLong))
-    midLat = math.degrees(math.atan2(math.sin(math.radians(startLat)) + math.sin(math.radians(endLat)), math.sqrt( (math.cos(math.radians(startLat))+bX)*(math.cos(math.radians(startLat))+bX) + bY*bY ) ))
-    midLong = math.degrees(math.radians(startLong) + math.atan2(bY, math.cos(math.radians(startLat)) + bX))
-    ret.append(midLat)
-    ret.append(midLong)
+    b_x = math.cos(math.radians(end_lat)) * math.cos(math.radians(end_long)-math.radians(start_long))
+    b_y = math.cos(math.radians(end_lat)) * math.sin(math.radians(end_long)-math.radians(start_long))
+    mid_lat = math.degrees(math.atan2(math.sin(math.radians(start_lat)) + math.sin(math.radians(end_lat)), math.sqrt( (math.cos(math.radians(start_lat))+b_x)*(math.cos(math.radians(start_lat))+b_x) + b_y*b_y ) ))
+    mid_long = math.degrees(math.radians(start_long) + math.atan2(b_y, math.cos(math.radians(start_lat)) + b_x))
+    ret.append(mid_lat)
+    ret.append(mid_long)
     return ret
 
-def calc_destination(startLat, startLong, bearing, distance):
+def calc_destination(start_lat, start_long, bearing, distance):
     ret = []
-    endLat = math.degrees(math.asin( math.sin(math.radians(startLat))*math.cos(distance/radius) + math.cos(math.radians(startLat))*math.sin(distance/radius)*math.cos(math.radians(bearing))))
-    endLong = startLong + math.atan2(math.sin(math.radians(bearing))*math.sin(distance/radius)*math.cos(math.radians(startLat)), math.cos(distance/radius)-math.sin(math.radians(startLat))*math.sin(math.radians(endLat)))
-    ret.append(endLat)
-    ret.append(endLong)
+    end_lat = math.degrees(math.asin( math.sin(math.radians(start_lat))*math.cos(distance/radius) + math.cos(math.radians(start_lat))*math.sin(distance/radius)*math.cos(math.radians(bearing))))
+    end_long = start_long + math.atan2(math.sin(math.radians(bearing))*math.sin(distance/radius)*math.cos(math.radians(start_lat)), math.cos(distance/radius)-math.sin(math.radians(start_lat))*math.sin(math.radians(end_lat)))
+    ret.append(end_lat)
+    ret.append(end_long)
     return ret
 
 print('Distance={0} metres'.format(calc_distance(-33.864937, 151.210059, -33.720171, 151.027125)))
