@@ -2,7 +2,7 @@ import math
 
 declination = 0
 
-def magHeading(x, y, z):
+def mag_heading(x, y, z):
     heading = math.atan2(y, x) + declination
     # fix up sign so we don't go out of range
     if heading > (2 * math.pi):
