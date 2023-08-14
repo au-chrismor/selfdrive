@@ -1,5 +1,5 @@
 '''
-    Copyright (C) 2018, by Christopher F. Moran and Emergent Technology
+    Copyright (C) 2018-2023, by Christopher F. Moran and Emergent Technology
     This is original work contains products developed by other organisations
     including, but not limited to:
     OpenCV, Python Core Team
@@ -20,7 +20,7 @@ hasStereoCam = False
 '''
     Exception Handler
 '''
-def printException():
+def print_exception():
 	exc_type, exc_obj, tb = sys.exc_info()
 	f = tb.tb_frame
 	lineNumber = tb.tb_lineno
@@ -34,7 +34,7 @@ def printException():
 	Split and combine the stereo image
 	This allows us to merge the data from an ELP Stereo Camera
 '''
-def splitFrame(frame):
+def split_frame(frame):
 	if hasStereoCam:
 		try:
 			frame_height = frame.shape[0]
@@ -43,19 +43,19 @@ def splitFrame(frame):
 			crop2 = frame[0:frame_height, frame_width / 2:frame_width]
 			result = cv2.addWeighted(crop1, 0.5, crop2, 0.5, 0)
 		except Exception as ex:
-			printException()
+			print_exception()
 			result = None
 
 		return result 
 	else:
 		return frame
 
-def makeSmallFrame(frame, startC, startR, endC, endR):
+def make_small_frame(frame, startC, startR, endC, endR):
 	try:
 		print('startC={} startR={} endC={} endR={}'.format(startC, startR, endC, endR))
 		result = frame[startC:startR, endC:endR]
 	except Exception as ex:
-		printException()
+		print_exception()
 		result = None
 
 	return result
@@ -65,7 +65,7 @@ def makeSmallFrame(frame, startC, startR, endC, endR):
 		objects from an original full-colour image.
 
 '''
-def reduceFrame(frame):
+def reduce_frame(frame):
 	kernel = np.ones((5,5),np.uint8)
 	# Our operations on the frame come here
 	grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -88,18 +88,18 @@ while True:
 		# Capture frame-by-frame
 		ret, frame = cap.read()
 
-		frame = splitFrame(frame)	
+		frame = split_frame(frame)	
 
 
-		redFrame = reduceFrame(frame)
+		redFrame = reduce_frame(frame)
 		row1Top = int(frame.shape[0] / 2)
 		row1Bot = int(frame.shape[0] / 2 + 50)
 		row2Top = int(frame.shape[0] / 2 - 50)
 		row2Bot = row1Top
 
 		# Get the moments from the frame
-		#m = cv2.moments(makeSmallFrame(redFrame, startC = 0, startR = 0, endC = redFrame.shape[1], endR = redFrame.shape[0]))
-		print(makeSmallFrame(redFrame, startC=0, startR=0, endC=128, endR=128))
+		#m = cv2.moments(make_small_frame(redFrame, startC = 0, startR = 0, endC = redFrame.shape[1], endR = redFrame.shape[0]))
+		print(make_small_frame(redFrame, startC=0, startR=0, endC=128, endR=128))
 		m = cv2.moments(redFrame)
 		x = m['m10'] / m['m00']
 		y = m['m01'] / m['m00']
@@ -124,7 +124,7 @@ while True:
 			break
 		out.write(redFrame)
 	except Exception as ex:
-		printException()
+		print_exception()
 
 # When everything is done, release the capture
 out.release()
